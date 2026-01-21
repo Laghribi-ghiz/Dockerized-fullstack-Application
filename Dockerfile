@@ -1,12 +1,21 @@
-# Étape 1 : Image de base avec Java
-FROM openjdk:17-alpine
+# Étape 1 : builder
+FROM maven:3.9.3-eclipse-temurin-17 AS build
+WORKDIR /app
 
-# Étape 2 : Copier le jar depuis target/
-ADD target/*.jar app.jar
+# Copier le pom.xml et le code source
+COPY pom.xml .
+COPY src ./src
 
-# Étape 3 : Exposer le port (optionnel mais pratique)
-#EXPOSE 8080
+# Compiler le projet
+RUN mvn clean package -DskipTests
 
-# Étape 4 : Lancer l'application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Étape 2 : runtime
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
 
+# Copier le jar compilé
+COPY --from=build /app/target/*.jar app.jar
+ENV SERVER_PORT=8081
+ENV SERVER_ADDRESS=0.0.0.0
+EXPOSE 8081
+ENTRYPOINT ["java","-jar","app.jar"]

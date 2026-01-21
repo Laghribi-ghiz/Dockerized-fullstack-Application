@@ -6,15 +6,18 @@ import { Table, Card } from 'react-bootstrap';
 export default class VoitureListe extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            voitures: [] // stocke les voitures récupérées
+            voitures: []
         };
     }
 
-    // appelé juste après le montage du composant
     componentDidMount() {
-        axios.get('http://localhost:8080/api/voitures')
+        // URL backend : Docker ou local
+        const API_URL = process.env.REACT_APP_BACKEND_URL
+            ? `${process.env.REACT_APP_BACKEND_URL}/api/voitures`
+            : 'http://localhost:9090/api/voitures';
+
+        axios.get(API_URL)
             .then(response => {
                 this.setState({ voitures: response.data });
             })
