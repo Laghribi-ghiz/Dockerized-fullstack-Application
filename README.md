@@ -1,4 +1,4 @@
-# Dockerized-Spring-Boot-MySQL-Application
+# Dockerized-Spring-Boot-Mariadb-Application
 This project is a full-stack application for managing vehicles. It consists of:
 
 Backend: Spring Boot application (Java) exposing a REST API to manage vehicles.
