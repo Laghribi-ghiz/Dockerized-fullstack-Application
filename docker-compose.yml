@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mariadb:
     image: mariadb:11
@@ -7,39 +5,32 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: compagnie
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
     ports:
-      - "3307:3306"   # 3307 externe pour éviter conflit avec MariaDB local
+      - "3307:3306"
     volumes:
       - ./mariadb_data:/var/lib/mysql
-    networks:
-      - spring-net
+    restart: unless-stopped
 
-  backend:
-    build: .           # Dockerfile Spring Boot à la racine du projet (même dossier que docker-compose.yml)
+  springboot-app:
     container_name: springboot-app
+    build: .
     ports:
-      - "9090:8081"   # 9090 sur PC -> 8082 dans container
+      - "9091:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/compagnie
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/compagnie?useSSL=false
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
     depends_on:
       - mariadb
-    networks:
-      - spring-net
+    restart: unless-stopped
 
-  frontend:
-    build: ./src/main/webapp/reactjs   # chemin vers Dockerfile React
+  react-app:
+    build: ./src/main/webapp/reactjs
     container_name: react-app
     ports:
-      - "3000:80"    # frontend sur localhost:3000
+      - "3000:80"
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:9091
     depends_on:
-      - backend
-    networks:
-      - spring-net
-
-networks:
-  spring-net:
-    driver: bridge
+      - springboot-app
+    restart: unless-stopped

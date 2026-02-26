@@ -25,6 +25,7 @@ public class DemoApplication {
 	private ProprietaireRepo proprietaireRepo;
 
 	@Bean
+
 	CommandLineRunner initDatabase() {
 		return args -> {
 

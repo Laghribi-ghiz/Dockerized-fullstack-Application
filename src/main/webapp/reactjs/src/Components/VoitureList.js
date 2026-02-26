@@ -1,4 +1,3 @@
-// src/Components/VoitureListe.js
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Table, Card } from 'react-bootstrap';
@@ -12,10 +11,10 @@ export default class VoitureListe extends Component {
     }
 
     componentDidMount() {
-        // URL backend : Docker ou local
-        const API_URL = process.env.REACT_APP_BACKEND_URL
-            ? `${process.env.REACT_APP_BACKEND_URL}/api/voitures`
-            : 'http://localhost:9090/api/voitures';
+        // Utiliser la variable d'environnement ou une valeur par défaut
+        const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8081/api/voitures';
+        
+        console.log("Appel API vers:", API_URL); // Pour déboguer
 
         axios.get(API_URL)
             .then(response => {
@@ -23,6 +22,7 @@ export default class VoitureListe extends Component {
             })
             .catch(error => {
                 console.error("Erreur lors de la récupération des voitures :", error);
+                console.error("URL utilisée:", API_URL); // Afficher l'URL pour déboguer
             });
     }
 
