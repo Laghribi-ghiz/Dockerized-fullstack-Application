@@ -1,4 +1,4 @@
-# Dockerized-Spring-Boot-MySQL-Application
+# Dockerized-Spring-Boot-Mariadb-Application
 This project is a full-stack application for managing vehicles. It consists of:
 
 Backend: Spring Boot application (Java) exposing a REST API to manage vehicles.
@@ -15,27 +15,19 @@ The following Docker images are included:
 | `react-app:latest`      | Frontend React application                 |
 | `mariadb:11`            | MariaDB database (optional, preconfigured) |
 
-## 1. Pull Docker Images
+## 1. Clone the Repository
 
- docker pull ghizlane25/springboot-app:latest
+git clone git@github.com:Laghribi-ghiz/Dockerized-fullstack-Application.git
+cd Dockerized-fullstack-Application
 
- docker pull ghizlane25/react-app:latest
+## 2. Run the Application with Docker Compose
 
- docker pull ghizlane25/mariadb:11
-
-## 2. Run MariaDB
-
-docker run -d -p 3306:3306 --name mariadb-test -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=compagnie mariadb:11
-
-## 3. Run Backend
-
-   docker run -d -p 9090:8081 --name springboot-test --link mariadb-test:springdb -e SPRING_DATASOURCE_URL=jdbc:mariadb://springdb:3306/compagnie -e SPRING_DATASOURCE_USERNAME=root -e SPRING_DATASOURCE_PASSWORD=root springboot-app:latest
-  
-## 4. Run Frontend
-
-   docker run -d -p 3000:8080 --name react-test react-app:latest 
+docker compose up --build
 
 ## 5. Access the App
 
-   Frontend: http://localhost:3000
-   Backend API: http://localhost:9090/api/voitures
+Frontend → http://localhost:3000
+
+Backend API → http://localhost:8000
+
+MariaDB → runs internally on port 3306
